@@ -3,9 +3,11 @@ const { NotFound } = require('http-errors')
 const { Contact } = require('../models')
 const { sendSeccessRes } = require('../helpers')
 
-const updateContact = async (req, res) => {
+const updateStatusContact = async (req, res) => {
   const { contactId } = req.params
-  const result = await Contact.findByIdAndUpdate(contactId, req.body, { new: true })
+  const { favorite } = req.body
+
+  const result = await Contact.findByIdAndUpdate(contactId, favorite, { new: true })
 
   if (!result) {
     throw new NotFound(`Product with id=${contactId} not found`)
@@ -14,4 +16,4 @@ const updateContact = async (req, res) => {
   sendSeccessRes(res, result, 200, 'Contact has been successfully updated')
 }
 
-module.exports = updateContact
+module.exports = updateStatusContact
