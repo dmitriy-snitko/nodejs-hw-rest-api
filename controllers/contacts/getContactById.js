@@ -1,13 +1,15 @@
 const { NotFound } = require('http-errors')
 
-const { Contact } = require('../models')
-const { sendSeccessRes } = require('../helpers')
+const { Contact } = require('../../models')
+const { sendSeccessRes } = require('../../helpers')
 
 const getContactById = async (req, res) => {
   const { contactId } = req.params
-  const result = await Contact.findById(contactId, '_id name email phone favorite')
+  const ownerId = req.user._id
 
-  if (!result) {
+  const result = await Contact.findById(contactId)
+
+  if (!result || ownerId.toString() !== result.owner.toString()) {
     throw new NotFound(`Product with id=${contactId} not found`)
   }
 
