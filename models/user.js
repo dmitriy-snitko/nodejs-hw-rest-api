@@ -21,6 +21,9 @@ const userSchema = Schema(
       enum: ['starter', 'pro', 'business'],
       default: 'starter',
     },
+    avatarURL: {
+      type: String,
+    },
     token: {
       type: String,
       default: null,
@@ -31,6 +34,10 @@ const userSchema = Schema(
 
 userSchema.methods.setPassword = function (password) {
   this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
+}
+
+userSchema.methods.setAvatar = function (avatar) {
+  this.avatarURL = avatar
 }
 
 userSchema.methods.comparePassword = function (password) {
@@ -54,5 +61,5 @@ const User = model('user', userSchema)
 
 module.exports = {
   User,
-  joiSchema
+  joiSchema,
 }
