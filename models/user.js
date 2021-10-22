@@ -2,6 +2,7 @@ const { Schema, model } = require('mongoose')
 const Joi = require('joi')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const gravatar = require('gravatar')
 
 const { SECRET_KEY } = process.env
 
@@ -36,7 +37,16 @@ userSchema.methods.setPassword = function (password) {
   this.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10))
 }
 
-userSchema.methods.setAvatar = function (avatar) {
+userSchema.methods.setAvatar = function (email) {
+  const avatar = gravatar.url(
+    email,
+    {
+      s: '250',
+      d: 'robohash',
+    },
+    true
+  )
+
   this.avatarURL = avatar
 }
 
