@@ -11,6 +11,10 @@ const login = async (req, res) => {
     throw new NotFound('Email or password incorrect')
   }
 
+  if (!user.verify) {
+    throw new NotFound('Email not verify')
+  }
+
   const token = user.createToken()
 
   await User.findByIdAndUpdate(user._id, { token })

@@ -1,6 +1,6 @@
 const { User } = require('../../models')
 const { Conflict } = require('http-errors')
-const { sendSeccessRes } = require('../../helpers')
+const { sendSeccessRes, createEmail, sendEmail } = require('../../helpers')
 
 const register = async (req, res) => {
   const { email, password } = req.body
@@ -14,7 +14,12 @@ const register = async (req, res) => {
   newUser.setPassword(password)
   newUser.setAvatar(email)
 
+  const verifyToken = await newUser.setVerifyToken()
+
   await newUser.save()
+
+  const data = createEmail(req, verifyToken)
+  sendEmail(data)
 
   sendSeccessRes(
     res,
